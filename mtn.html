@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/quake brand logo.png">
+
+    <!-- Meta Description -->
+    <meta name="description"
+        content=" Explore the MTN Rwanda campaign;  connecting individuals, businesses, and communities through innovative voice, data, and enterprise solutions that drive digital growth and loyalty across Rwanda.">
+
+    <!-- Google Fonts: Poppins (400 for body, 600 for headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN with custom font config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome 7 (latest, single link for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>MTN Rwanda</title>
+    <style>
+        body {
+            cursor: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+    cursor: none !important;
+}
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @media (min-width: 1025px) {
+
+            .cursor-dot,
+            .cursor-circle {
+                display: block;
+            }
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #F97316;
+            transition: background-color 0.2s;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(249, 115, 22, 0.7);
+            transition: width 0.3s ease-out, height 0.3s ease-out, border-color 0.3s ease-out;
+        }
+
+        .hero-bg {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        .nav-pill {
+            height: 56px;
+            width: 56px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: transform .25s ease, background-color .2s ease, box-shadow .2s ease;
+        }
+
+        .nav-pill:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            background: rgba(0, 0, 0, 1);
+            color: white;
+            transition: opacity .35s ease-out, transform .35s ease-out;
+            transform-origin: top right;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        .menu-overlay.open-menu {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .menu-links-container {
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .menu-links-container-wrap {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .menu-links-container-wrap {
+                align-items: flex-start;
+                padding-right: 0;
+            }
+        }
+
+        .big-link {
+            font-size: clamp(28px, 6vw, 42px);
+            line-height: 0.9;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+            perspective: 900px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .big-link .num {
+            position: absolute;
+            top: -10px;
+            left: -50px;
+            font-weight: 700;
+            opacity: .35;
+            font-size: clamp(16px, 2vw, 22px);
+            transition: opacity .3s ease;
+        }
+
+        .big-link:hover .num {
+            opacity: 0;
+        }
+
+        .flip-wrap {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform .6s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        .flip-face {
+            backface-visibility: hidden;
+            display: inline-block;
+        }
+
+        .flip-back {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: rotateX(180deg);
+        }
+
+        .big-link:hover .flip-wrap {
+            transform: rotateX(180deg) translateY(-6px);
+        }
+
+        .big-link:hover .flip-face {
+            color: #d47938;
+            -webkit-text-stroke: 0;
+        }
+
+        .above-overlay {
+            z-index: 50;
+            position: relative;
+        }
+
+        .card-lift {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 30px rgba(2, 6, 23, 0.6);
+        }
+
+        .burger-two {
+            width: 22px;
+            height: 14px;
+            position: relative;
+        }
+
+        .burger-two span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: white;
+            transition: transform .28s ease, opacity .28s ease;
+        }
+
+        .burger-two span:nth-child(1) {
+            top: 0;
+        }
+
+        .burger-two span:nth-child(2) {
+            bottom: 0;
+        }
+
+        .open .burger-two span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .open .burger-two span:nth-child(2) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        .close-x {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            z-index: 70;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+        }
+
+        .close-x:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        @keyframes slideInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            opacity: 0;
+            animation: slideInUp 1s cubic-bezier(.2, .9, .2, 1) forwards;
+        }
+
+        #mainContent h1 {
+            animation-delay: 0.1s;
+        }
+
+        #mainContent p:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        #mainContent a {
+            animation-delay: 0.5s;
+        }
+
+        /* =============================================
+           PORTFOLIO LAYOUT — sticky left, scrolling right
+           ============================================= */
+        .portfolio-wrap {
+            display: flex;
+            gap: 3.5rem;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* LEFT: sticky panel */
+        .portfolio-left {
+            flex: 0 0 38%;
+            max-width: 38%;
+            position: sticky;
+            /* stick below the header (~80px) */
+            top: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* RIGHT: scrollable image column */
+        .portfolio-right {
+            flex: 1 1 58%;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background: #000000;
+            border-radius: 16px;
+            padding: 1rem;
+        }
+
+        /* Heading — bigger, orange */
+        .portfolio-left h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            color: #FF7A2D;
+        }
+
+        /* Description — slightly bigger */
+        .portfolio-left p {
+            font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+            color: #d1d5db;
+            max-width: 420px;
+            line-height: 1.7;
+        }
+
+        /* Explore Link */
+        .explore-link {
+            display: inline-block;
+            font-weight: 700;
+            text-decoration: none;
+            color: #FF7A2D;
+            padding: 0.5rem 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .explore-link:hover {
+            animation: bounce 0.8s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Images inside the right column */
+        .portfolio-right img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Video thumb */
+        .video-thumb {
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .video-thumb .play-btn {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+        }
+
+        .video-thumb .play-btn span {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 1.25rem;
+        }
+
+        /* Responsive: stack on smaller screens */
+        @media (max-width: 1024px) {
+            .portfolio-wrap {
+                flex-direction: column;
+            }
+
+            .portfolio-left {
+                position: static;
+                flex: unset;
+                max-width: 100%;
+                margin-bottom: 1.25rem;
+            }
+
+            .portfolio-right {
+                width: 100%;
+            }
+
+            .portfolio-left h2 {
+                font-size: clamp(1.75rem, 6vw, 2.5rem);
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+
+            html,
+            body {
+                background-color: black;
+                min-height: 100%;
+            }
+
+            .hero-bg {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: visible;
+            }
+
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #mainContent {
+                flex: 1;
+            }
+
+            .portfolio-wrap {
+                flex-direction: column !important;
+                gap: 2rem;
+            }
+
+            .portfolio-left {
+                position: static !important;
+                flex: unset !important;
+                max-width: 100% !important;
+                margin-bottom: 0 !important;
+                margin-top: 1.5rem !important;
+                text-align: left;
+            }
+
+            .portfolio-right {
+                width: 100% !important;
+                min-width: unset;
+            }
+
+            .portfolio-page {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .portfolio-page>div:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+
+            html,
+            body {
+                background-color: black;
+                min-height: 100%;
+            }
+
+            .hero-bg {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: visible;
+            }
+
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased text-white">
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <!-- We need the whole page to scroll, so hero-bg should not clip overflow -->
+    <div class="hero-bg" style="min-height: 100vh; overflow: visible;">
+
+        <header
+            class="w-full flex items-center justify-between px-4 sm:px-6 py-4 above-overlay sticky top-0 z-50 bg-black">
+            <div class="nav-pill card-lift p-1 hide-below-lg">
+                <img src="/img/quake brand logo.png" alt="Quake Brand logo"
+                    class="h-18 w-14 rounded-full object-cover" />
+            </div>
+
+            <div class="hide-below-lg lg:hidden w-12 h-12"></div>
+
+            <button id="menuBtn" aria-label="open menu" aria-controls="menuOverlay" aria-expanded="false"
+                class="nav-pill card-lift p-1 flex items-center justify-center focus:outline-none">
+                <div id="burgerWrap" class="burger-two">
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </header>
+
+        <main class="flex-1 flex flex-col items-center p-4 sm:p-6 pt-8">
+            <div id="mainContent" class="max-w-6xl w-full above-overlay z-50 animate-slide-up">
+                <div class="portfolio-wrap mx-auto flex flex-col md:flex-row gap-10">
+
+                    <!-- LEFT -->
+                    <div class="portfolio-left text-left mt-20 md:mt-28 max-w-lg">
+                        <h2 class="text-4xl md:text-5xl font-semibold leading-tight">
+                            MTN Product <br>Campaign
+                        </h2>
+
+                        <p class="mb-6 mt-4">
+                            The MTN Rwanda campaign promotes digital connectivity through voice, data, and enterprise
+                            solutions, positioning MTN as a trusted partner for individuals, businesses, and communities
+                            while driving adoption, brand affinity, and loyalty.
+                        </p>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="portfolio-right flex flex-col gap-4">
+
+                        <!-- TOP BAR: Nav Buttons only (heading moves into each page) -->
+                        <div class="flex items-center justify-end mb-2">
+                            <div class="cards-nav flex gap-3">
+
+                                <!-- PREV -->
+                                <a href="#" id="prevBtn" aria-label="previous page" class="w-10 h-10 rounded-full flex items-center justify-center text-white
+   bg-white/10 backdrop-blur-md border border-white/20 shadow-lg
+   hover:bg-white/20 transition cursor-pointer">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </a>
+
+                                <!-- NEXT -->
+                                <a href="#" id="nextBtn" aria-label="next page" class="w-10 h-10 rounded-full flex items-center justify-center text-white
+   bg-white/10 backdrop-blur-md border border-white/20 shadow-lg
+   hover:bg-white/20 transition cursor-pointer">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGES WRAPPER -->
+                        <div id="portfolioPages" class="relative overflow-hidden">
+
+                            <!-- PAGE 1 -->
+                            <div
+                                class="portfolio-page grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
+                                <div class="col-span-1 sm:col-span-2 md:col-span-3 mb-1">
+                                    <h3 class="text-xl font-semibold tracking-wide text-orange-500">Gwamon Campaign</h3>
+                                </div>
+
+                                <img src="/img/wili.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/wili.jpeg">
+                                <img src="/img/gwa2.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/gwa2.jpeg">
+                                <img src="/img/gwa3.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/gwa3.jpeg">
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/gwavid1.mp4">
+                                    <img src="/img/gwat1.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/gwavid3.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 172614.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/gwavid2.mp4">
+                                    <img src="/img/gwat2.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PAGE 2 -->
+                            <div
+                                class="portfolio-page hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
+                                <div class="col-span-1 sm:col-span-2 md:col-span-3 mb-1">
+                                    <h3 class="text-xl font-semibold tracking-wide text-orange-500">Triple Data</h3>
+                                </div>
+
+                                <img src="/img/trip1.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/trip1.jpeg">
+                                <img src="/img/trip2.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/trip2.jpeg">
+                                <img src="/img/trip3.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/trip3.jpeg">
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/tripvid1.mp4">
+                                    <img src="/img/tript1.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/tripvid3.mp4">
+                                    <img src="/img/tript2.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/tripvid2.mp4">
+                                    <img src="/img/tript3.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PAGE 3 -->
+                            <div
+                                class="portfolio-page hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
+                                <div class="col-span-1 sm:col-span-2 md:col-span-3 mb-1">
+                                    <h3 class="text-xl font-semibold tracking-wide text-orange-500">Desa De</h3>
+                                </div>
+
+                                <img src="/img/des1.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/des1.jpeg">
+                                <img src="/img/des2.png"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/des2.png">
+                                <img src="/img/des3.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/des3.jpeg">
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/desvid1.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 214340.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/desvid2.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 214227.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/desvid3.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 172614.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PAGE 4 -->
+                            <div
+                                class="portfolio-page hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
+                                <div class="col-span-1 sm:col-span-2 md:col-span-3 mb-1">
+                                    <h3 class="text-xl font-semibold tracking-wide text-orange-500">Mobile World
+                                        Conference 2025</h3>
+                                </div>
+
+                                <img src="/img/wu1.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/wu1.jpeg">
+                                <img src="/img/wu2.jpeg"
+                                    class="w-full h-auto md:max-h-[290px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/wu2.jpeg">
+                                <img src="/img/wu4.jpeg"
+                                    class="w-full h-auto md:max-h-[275px] object-contain rounded-lg cursor-pointer image-trigger"
+                                    data-image="/img/wu4.jpeg">
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/wuvid1.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 220836.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/wuvid3.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 220946.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative cursor-pointer group video-trigger"
+                                    data-video="/videos/wuvid2.mp4">
+                                    <img src="/img/Screenshot 2026-02-22 220928.png"
+                                        class="w-full h-auto md:max-h-[255px] object-contain rounded-lg">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-black/60 p-4 rounded-full group-hover:scale-110 transition">▶
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- PAGE DOTS -->
+                        <div class="flex gap-2 mt-2 justify-center">
+                            <span class="dot w-2 h-2 rounded-full bg-white transition-all"></span>
+                            <span class="dot w-2 h-2 rounded-full bg-white/30 transition-all"></span>
+                            <span class="dot w-2 h-2 rounded-full bg-white/30 transition-all"></span>
+                            <span class="dot w-2 h-2 rounded-full bg-white/30 transition-all"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+
+        <footer id="mainFooter" class="py-4 mt-auto w-full">
+            <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+                <hr class="border-gray-800 mb-4">
+                <div class="flex justify-between text-xs text-gray-700 font-medium">
+                    <p>&copy; <span id="currentYear"></span> Quake Brand Advertising</p>
+                    <p>All rights reserved</p>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- end hero-bg -->
+
+    <div id="menuOverlay" class="menu-overlay hidden" aria-hidden="true">
+        <button id="closeOverlay" class="close-x card-lift" aria-label="close menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="h-full w-full flex flex-col lg:flex-row">
+
+            <div class="w-full lg:w-2/3 h-full py-8 px-8 lg:py-16 lg:px-24 menu-links-container">
+                <div class="menu-links-container-wrap">
+                    <a href="/home.html" class="big-link relative text-center lg:text-left">
+                        <span class="num">01</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">HOME</span>
+                            <span class="flip-face flip-back">HOME</span>
+                        </span>
+                    </a>
+
+                    <a href="/about.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">02</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">WHO WE ARE</span>
+                            <span class="flip-face flip-back">WHO WE ARE</span>
+                        </span>
+                    </a>
+
+                    <a href="/work.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">03</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">OUR WORK</span>
+                            <span class="flip-face flip-back">OUR WORK</span>
+                        </span>
+                    </a>
+
+                    <a href="/contact.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">04</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">CONTACT</span>
+                            <span class="flip-face flip-back">CONTACT</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="w-full lg:w-1/3 py-8 px-8 lg:py-12 lg:px-20 flex flex-col justify-center items-center contact-small flex-1">
+                <div class="w-full text-center lg:text-left">
+                    <p class="text-[12px] mt-8 text-gray-500 uppercase tracking-wider opacity-80">Work inquiries</p>
+                    <p
+                        class="mt-2 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        info@quakeadvertising.com
+                    </p>
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        Ph:+250 788 382 228
+                    </p>
+
+                    <div class="flex items-center justify-center lg:justify-start gap-4 mt-3">
+                        <a href="" class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="" class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="" class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--IMAGE MODAL-->
+    <div id="imageModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="relative flex items-center justify-center w-[90%] md:w-[700px]">
+            <button id="closeImageModal" class="absolute -top-10 right-0 text-white text-2xl">✕</button>
+            <img id="modalImage" src="" class="max-h-[85vh] max-w-full w-auto rounded-lg" alt="">
+        </div>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div id="videoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="relative flex items-center justify-center w-[90%] md:w-[700px]">
+
+            <button id="closeModal" class="absolute -top-10 right-0 text-white text-2xl">
+                ✕
+            </button>
+
+            <video id="modalVideo" class="max-h-[85vh] max-w-full w-auto rounded-lg" controls>
+            </video>
+
+        </div>
+    </div>
+
+    <script src="campaign.js"></script>
+    <script>
+            // ── Portfolio Pagination ──────────────────────────────────────────
+            (function () {
+                const pages = document.querySelectorAll('.portfolio-page');
+                const dots = document.querySelectorAll('.dot');
+                const prev = document.getElementById('prevBtn');
+                const next = document.getElementById('nextBtn');
+                let current = 0;
+
+                function goTo(index) {
+                    // bounds
+                    if (index < 0) index = pages.length - 1;
+                    if (index >= pages.length) index = 0;
+
+                    // hide all, show target
+                    pages.forEach((p, i) => {
+                        p.classList.add('hidden');
+                        p.classList.remove('grid');
+                        dots[i].classList.remove('bg-white');
+                        dots[i].classList.add('bg-white/30');
+                    });
+
+                    pages[index].classList.remove('hidden');
+                    pages[index].classList.add('grid');
+                    dots[index].classList.add('bg-white');
+                    dots[index].classList.remove('bg-white/30');
+
+                    current = index;
+                }
+
+                prev.addEventListener('click', () => goTo(current - 1));
+                next.addEventListener('click', () => goTo(current + 1));
+
+                // init
+                goTo(0);
+            })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/quake brand logo.png">
+
+    <!-- Meta Description -->
+    <meta name="description"
+        content="Get in touch with Quake Advertising. Reach us via email, phone, or social media for inquiries or collaborations.">
+
+
+    <!-- Google Fonts: Poppins (400 for body, 600 for headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN with custom font config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome 7 (latest, single link for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Contact Us</title>
+
+    <style>
+        /* 1. Applied Poppins to the body and updated font weights */
+        body {
+            cursor: none;
+            /* Hide the default cursor */
+            font-family: 'Poppins', sans-serif;
+        }
+        * {
+    cursor: none !important;
+}
+
+        /* --- Custom Cursor --- */
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            display: none;
+            /* hidden by default */
+        }
+
+        /* Show cursor only on large screens (1024px and above) */
+        @media (min-width: 1025px) {
+
+            .cursor-dot,
+            .cursor-circle {
+                display: block;
+            }
+        }
+
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #F97316;
+            transition: background-color 0.2s;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(249, 115, 22, 0.7);
+            /* Updated transition to be smoother, relying on JS for the trail */
+            transition: width 0.3s ease-out, height 0.3s ease-out, border-color 0.3s ease-out;
+        }
+
+        /* --- Hero Background --- */
+        .hero-bg {
+            position: relative;
+            background-size: cover;
+            /* Use cover to fill the container, can be 'auto' if image is small/pattern */
+            background-position: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Edge darkening overlay (Vignette) */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 26%, rgba(0, 0, 0, 0.96) 50%);
+            mix-blend-mode: normal;
+        }
+
+        /* --- Navbar Pills --- */
+        .nav-pill {
+            height: 56px;
+            width: 56px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: transform .25s ease, background-color .2s ease, box-shadow .2s ease;
+        }
+
+        .nav-pill:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        /* --- Full-Screen Menu Overlay --- */
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            background: rgba(0, 0, 0, 1);
+            color: white;
+            /* NEW: Optimized transition for scale and opacity */
+            transition: opacity .35s ease-out, transform .35s ease-out;
+            transform-origin: top right;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        /* Menu state for open */
+        .menu-overlay.open-menu {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Explicitly set the height of the left menu container to full viewport height to enable centering */
+        .menu-links-container {
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* Wrap to center vertically on all screens, and align links left on large screens */
+        .menu-links-container-wrap {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .menu-links-container-wrap {
+                /* Change alignment to flex-start (left) on large screens */
+                align-items: flex-start;
+                padding-right: 0;
+            }
+        }
+
+        /* --- Huge Nav Links (Numbered) --- */
+        .big-link {
+            font-size: clamp(28px, 6vw, 42px);
+            line-height: 0.9;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+            perspective: 900px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .big-link .num {
+            position: absolute;
+            top: -10px;
+            /* Adjusted left position to align all numbers vertically */
+            left: -50px;
+            font-weight: 700;
+            opacity: .35;
+            font-size: clamp(16px, 2vw, 22px);
+            transition: opacity .3s ease;
+        }
+
+        /* Hide number when the link is hovered */
+        .big-link:hover .num {
+            opacity: 0;
+        }
+
+        /* Flip animation using 3D rotateX; create front and back faces */
+        .flip-wrap {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform .6s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        .flip-face {
+            backface-visibility: hidden;
+            display: inline-block;
+        }
+
+        .flip-back {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: rotateX(180deg);
+        }
+
+        .big-link:hover .flip-wrap {
+            transform: rotateX(180deg) translateY(-6px);
+        }
+
+        /* Hover visual: make fill transparent but keep stroke outline */
+        .big-link:hover .flip-face {
+        color: #d47938;
+        -webkit-text-stroke: 0;
+        /* orange */
+    }
+
+        /* Small contact column on right */
+        .contact-small {
+            max-width: 420px;
+        }
+
+        /* Reduce font size for work inquiries section in the menu */
+        .menu-overlay .contact-small .text-sm {
+            font-size: 0.75rem;
+            /* 12px - smaller than base 14px */
+        }
+
+        /* --- Slide-Up Entrance Animation --- */
+        @keyframes slideInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Apply slide-in animation to main hero content elements */
+        .animate-slide-up {
+            opacity: 0;
+            animation: slideInUp 1s cubic-bezier(.2, .9, .2, 1) forwards;
+        }
+
+        /* Menu Links Delay */
+        .menu-links-container-wrap>a {
+            opacity: 0;
+            animation: slideInUp 0.6s cubic-bezier(.2, .9, .2, 1) forwards;
+        }
+
+        .menu-links-container-wrap>a:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .menu-links-container-wrap>a:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .menu-links-container-wrap>a:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .menu-links-container-wrap>a:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .menu-overlay.open-menu .menu-links-container-wrap>a {
+            animation-name: slideInUp;
+        }
+
+        .menu-overlay:not(.open-menu) .menu-links-container-wrap>a {
+            animation: none;
+            opacity: 0;
+        }
+
+        /* ensure center content is above overlay */
+        .above-overlay {
+            z-index: 50;
+            position: relative;
+        }
+
+        /* subtle glass to push content forward from background */
+        .card-lift {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 30px rgba(2, 6, 23, 0.6);
+        }
+
+        /* Two-line hamburger with animation to X (Improved for centering) */
+        .burger-two {
+            width: 22px;
+            height: 14px;
+            position: relative;
+        }
+
+        .burger-two span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: white;
+            transition: transform .28s ease, opacity .28s ease;
+        }
+
+        .burger-two span:nth-child(1) {
+            top: 0;
+            /* Original position */
+        }
+
+        .burger-two span:nth-child(2) {
+            bottom: 0;
+            /* Original position */
+        }
+
+        .open .burger-two span:nth-child(1) {
+            /* Moves the top line down by 6px (half of 14px total height - 2px height of line) and rotates */
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .open .burger-two span:nth-child(2) {
+            /* Moves the bottom line up by 6px and rotates */
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* close X button inside overlay */
+        .close-x {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            z-index: 70;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+        }
+
+        .close-x:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        /* --- NEW STYLES FOR ABOUT PAGE CONTENT --- */
+        .mini-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .mini-card:hover {
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        .icon-pill {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F97316;
+            border-radius: 9999px;
+            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+        }
+
+        /* --- NEW STYLES FOR FOOTER --- */
+        #mainFooter {
+            z-index: 50;
+            position: relative;
+        }
+
+        .footer-content {
+            /* Using Tailwind max-w-screen-xl (1280px) and auto margins */
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 640px) {
+            .footer-content {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+
+        /* --- Responsive Tweaks --- */
+        @media (max-width: 1023px) {
+
+            /* Hide logo and placeholder below the Large (lg) breakpoint */
+            .hide-below-lg {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .hero-bg::after {
+                background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 0.96) 62%);
+            }
+
+            .nav-pill {
+                height: 48px;
+                width: 48px;
+            }
+
+            /* Small Screen Menu Links: Center all texts */
+            .menu-overlay .big-link,
+            .menu-overlay .contact-small .w-full {
+                text-align: center;
+            }
+
+            .menu-overlay .contact-small .flex {
+                justify-content: center !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased text-white">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <section id="hero" class="hero-bg min-h-screen h-screen flex flex-col">
+
+        <header class="w-full flex items-center justify-between px-4 sm:px-6 py-4 above-overlay">
+            <div class="nav-pill card-lift p-1 hide-below-lg">
+                <img src="/img/quake brand logo.png" alt="Quake Brand logo"
+                    class="h-18 w-14 rounded-full object-cover" />
+            </div>
+
+            <div class="hide-below-lg lg:hidden w-12 h-12"></div>
+
+            <button id="menuBtn" aria-label="open menu" aria-controls="menuOverlay" aria-expanded="false"
+                class="nav-pill card-lift p-1 flex items-center justify-center focus:outline-none">
+                <div id="burgerWrap" class="burger-two">
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </header>
+
+        <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+            <div id="aboutContent"
+                class="max-w-4xl w-full above-overlay   z-50 animate-slide-up p-6 md:p-10 rounded-xl border-xl card-lift shadow-2xl">
+
+                <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-6 tracking-tight text-orange-400">
+                    WORK INQUIRIES
+                </h1>
+
+                <p class="text-base text-gray-300 text-center mb-10 max-w-2xl mx-auto">
+                    We're ready to partner with you to solve your biggest challenges and create lasting impact. Tell us
+                    about your project, and let's start the conversation.
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-6 justify-center">
+
+                    <!-- EMAIL -->
+                    <a href="mailto:info@quakeadvertising.com"
+                        class="mini-card flex-1 flex items-center gap-4 cursor-pointer">
+                        <div class="icon-pill w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                            <img src="/img/email (4).png" alt="" class="w-6 h-6 object-contain">
+                        </div>
+                        <div>
+                            <p class="text-sm uppercase font-semibold text-gray-400">Email us</p>
+                            <p class="font-bold">info@quakeadvertising.com</p>
+                        </div>
+                    </a>
+
+                    <!-- PHONE -->
+                    <a href="tel:+250788382228" class="mini-card flex-1 flex items-center gap-4 cursor-pointer">
+                        <div class="icon-pill w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                            <img src="/img/telephone (2).png" alt="" class="w-6 h-6 object-contain">
+                        </div>
+                        <div>
+                            <p class="text-sm uppercase font-semibold text-gray-400">Call us</p>
+                            <p class="font-bold">+250 788 382 228</p>
+                        </div>
+                    </a>
+
+                </div>
+
+
+            </div>
+        </main>
+
+        <footer id="mainFooter" class="py-4 mt-auto">
+            <div class="footer-content max-w-screen-xl">
+                <hr class="border-gray-800 mb-4">
+                <div class="flex justify-between text-xs text-gray-700 font-medium">
+                    <p>&copy; <span id="currentYear"></span> Quake Brand Advertising</p>
+                    <p>All rights reserved</p>
+                </div>
+            </div>
+        </footer>
+
+
+    </section>
+
+    <div id="menuOverlay" class="menu-overlay hidden" aria-hidden="true">
+        <button id="closeOverlay" class="close-x card-lift" aria-label="close menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="h-full w-full flex flex-col lg:flex-row">
+
+            <div class="w-full lg:w-2/3 h-full py-8 px-8 lg:py-16 lg:px-24 menu-links-container">
+                <div class="menu-links-container-wrap">
+                    <a href="/home.html" class="big-link relative text-center lg:text-left">
+                        <span class="num">01</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">HOME</span>
+                            <span class="flip-face flip-back">HOME</span>
+                        </span>
+                    </a>
+
+                    <a href="/about.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">02</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">WHO WE ARE</span>
+                            <span class="flip-face flip-back">WHO WE ARE</span>
+                        </span>
+                    </a>
+
+                    <a href="/work.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">03</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">OUR WORK</span>
+                            <span class="flip-face flip-back">OUR WORK</span>
+                        </span>
+                    </a>
+
+                    <a href="/contact.html" class="big-link relative text-center lg:text-left mt-8">
+                        <span class="num">04</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front text-gray-500">CONTACT</span>
+                            <span class="flip-face flip-back">CONTACT</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="w-full lg:w-1/3 py-8 px-8 lg:py-12 lg:px-20 flex flex-col justify-center items-center contact-small flex-1">
+                <div class="w-full text-center lg:text-left">
+                    <p class="text-[12px] mt-8 text-gray-500 uppercase tracking-wider opacity-80">Work inquiries</p>
+
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        KG 11 Ave 2nd Floor, Nobiscum House
+                    </p>
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        info@quakeadvertising.com
+                    </p>
+
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        Ph:+250 788 382 228
+                    </p>
+
+                    <!-- Social Icons -->
+                    <div class="flex items-center justify-center lg:justify-start gap-4 mt-3">
+                        <a href="https://www.facebook.com/quakebrandfix/"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://x.com/quakebrandfix"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/quakebrandfix/?hl=en"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Link external JS -->
+    <script src="main.js"></script>
+</body>
+
+</html>

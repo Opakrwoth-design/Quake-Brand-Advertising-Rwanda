@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/quake brand logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>503 – Under Maintenance | Quake Advertising</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+        * {
+    cursor: none !important;
+}
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 560px;
+            width: 100%;
+        }
+
+        .error-code {
+            font-size: clamp(96px, 22vw, 180px);
+            font-weight: 800;
+            color: #3a3a3a;
+            line-height: 1;
+            letter-spacing: -4px;
+        }
+
+        .error-label {
+            font-size: clamp(14px, 3vw, 17px);
+            font-weight: 600;
+            color: #F97316;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+        }
+
+        .message {
+            font-size: clamp(14px, 2.5vw, 16px);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.75;
+            max-width: 420px;
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: #F97316;
+            border-radius: 2px;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 14px 36px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+
+        .home-link:hover {
+            border-color: #F97316;
+            color: #F97316;
+            box-shadow: 0 0 24px rgba(249, 115, 22, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .home-link svg {
+            transition: transform 0.25s ease;
+        }
+
+        .home-link:hover svg {
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p class="error-label">Service Unavailable</p>
+        <h1 class="error-code">503</h1>
+        <div class="divider"></div>
+        <p class="message">
+            This page is currently under development and not quite ready yet.
+            We're working hard behind the scenes — check back soon.
+        </p>
+        <a href="/home.html" class="home-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Home
+        </a>
+    </div>
+</body>
+
+</html>

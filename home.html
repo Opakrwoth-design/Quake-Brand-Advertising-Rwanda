@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/quake brand logo.png">
+
+    <!-- Meta Description -->
+    <meta name="description"
+        content="We help brands tell powerful stories by uncovering the real problems they face. Quake Advertising turns business truths into creative impact.">
+
+    <!-- Google Fonts: Poppins (400 for body, 600 for headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN with custom font config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome 7 (latest, single link for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Quake Brand Advertising</title>
+</head>
+<style>
+    body {
+        cursor: none;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    * {
+        cursor: none !important;
+    }
+
+    .cursor-dot,
+    .cursor-circle {
+        position: fixed;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+
+    @media (min-width: 1025px) {
+
+        .cursor-dot,
+        .cursor-circle {
+            display: block;
+        }
+    }
+
+    .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #F97316;
+        transition: background-color 0.2s;
+    }
+
+    .cursor-circle {
+        width: 40px;
+        height: 40px;
+        border: 2px solid rgba(249, 115, 22, 0.7);
+        transition: width 0.3s ease-out, height 0.3s ease-out, border-color 0.3s ease-out;
+    }
+
+    .hero-bg {
+        position: relative;
+        background-size: auto;
+        background-position: center;
+        background-image: url('/img/wizz\ two.jpg');
+        overflow: hidden;
+    }
+
+    /* Vignette overlay — now z-index 2 so canvas can sit above it at z-index 3 */
+    .hero-bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 26%, rgba(0, 0, 0, 0.96) 50%);
+        mix-blend-mode: normal;
+        z-index: 2;
+    }
+
+    /* Fireworks canvas — z-index 3: above vignette overlay, below page content (z-index 50) */
+    #fw-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    .nav-pill {
+        height: 56px;
+        width: 56px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        transition: transform .25s ease, background-color .2s ease, box-shadow .2s ease;
+    }
+
+    .nav-pill:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .menu-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: rgba(0, 0, 0, 1);
+        color: white;
+        transform-origin: top right;
+        transition: opacity .28s ease, visibility .28s ease;
+    }
+
+    .menu-links-container {
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .menu-links-container-wrap {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @media (min-width: 1024px) {
+        .menu-links-container-wrap {
+            align-items: flex-start;
+            padding-right: 0;
+        }
+    }
+
+    .big-link {
+        font-size: clamp(28px, 6vw, 42px);
+        line-height: 0.9;
+        font-weight: 800;
+        position: relative;
+        display: inline-block;
+        perspective: 900px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .big-link .num {
+        position: absolute;
+        top: -10px;
+        left: -50px;
+        font-weight: 700;
+        opacity: .35;
+        font-size: clamp(16px, 2vw, 22px);
+        transition: opacity .3s ease;
+    }
+
+    .big-link:hover .num {
+        opacity: 0;
+    }
+
+    .flip-wrap {
+        display: inline-block;
+        transform-style: preserve-3d;
+        transition: transform .6s cubic-bezier(.2, .9, .2, 1);
+    }
+
+    .flip-face {
+        backface-visibility: hidden;
+        display: inline-block;
+    }
+
+    .flip-back {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: rotateX(180deg);
+    }
+
+    .big-link:hover .flip-wrap {
+        transform: rotateX(180deg) translateY(-6px);
+    }
+
+    .big-link:hover .flip-face {
+        color: #d47938;
+        -webkit-text-stroke: 0;
+    }
+
+    .contact-small {
+        max-width: 420px;
+    }
+
+    .contact-small .text-sm {
+        font-size: 0.75rem;
+    }
+
+    .last-word {
+        color: #F97316;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+    }
+
+    .animate-underline .last-word::after {}
+
+    @keyframes drawUnderline {
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    @keyframes continuousUnderline {
+        0% {
+            transform: scaleX(0);
+        }
+
+        10% {
+            transform: scaleX(1);
+        }
+
+        50% {
+            transform: scaleX(1);
+        }
+
+        60% {
+            transform: scaleX(0);
+        }
+
+        100% {
+            transform: scaleX(0);
+        }
+    }
+
+    .continuous-underline-animation .last-word::after {
+        animation: continuousUnderline 4s linear infinite;
+    }
+
+    @keyframes slideInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-slide-up {
+        opacity: 0;
+        animation: slideInUp 1s cubic-bezier(.2, .9, .2, 1) forwards;
+    }
+
+    #heroContent .animate-slide-up:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    #heroContent .animate-slide-up:nth-child(2) {
+        animation-delay: 0.3s;
+    }
+
+    #heroContent .animate-slide-up:nth-child(3) {
+        animation-delay: 0.5s;
+    }
+
+    .menu-links-container-wrap>a {
+        opacity: 0;
+        animation: slideInUp 0.6s cubic-bezier(.2, .9, .2, 1) forwards;
+    }
+
+    .menu-links-container-wrap>a:nth-child(1) {
+        animation-delay: 0.3s;
+    }
+
+    .menu-links-container-wrap>a:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    .menu-links-container-wrap>a:nth-child(3) {
+        animation-delay: 0.5s;
+    }
+
+    .menu-links-container-wrap>a:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+
+    .menu-overlay.open-menu .menu-links-container-wrap>a {
+        animation-name: slideInUp;
+    }
+
+    .menu-overlay:not(.open-menu) .menu-links-container-wrap>a {
+        animation: none;
+        opacity: 0;
+    }
+
+    .highlight-wrap {
+        position: static;
+        display: inline;
+    }
+
+    @media (min-width: 1024px) {
+        .side-text-container {
+            white-space: nowrap;
+        }
+    }
+
+    .above-overlay {
+        z-index: 50;
+        position: relative;
+    }
+
+    .card-lift {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 30px rgba(2, 6, 23, 0.6);
+    }
+
+    .burger-two {
+        width: 22px;
+        height: 14px;
+        position: relative;
+    }
+
+    .burger-two span {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: white;
+        transition: transform .28s ease, opacity .28s ease;
+    }
+
+    .burger-two span:nth-child(1) {
+        top: 0;
+    }
+
+    .burger-two span:nth-child(2) {
+        bottom: 0;
+    }
+
+    .open .burger-two span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .open .burger-two span:nth-child(2) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    .close-x {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        z-index: 70;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+    }
+
+    .close-x:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .animate-subtle-bounce {
+        animation: subtleBounce 7.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtleBounce {
+        0% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(18px, -12px);
+        }
+
+        50% {
+            transform: translate(-18px, 24px);
+        }
+
+        75% {
+            transform: translate(12px, -18px);
+        }
+
+        100% {
+            transform: translate(-6px, 12px);
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .hide-below-lg {
+            display: none !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .big-link {
+            font-size: clamp(26px, 9vw, 44px);
+        }
+
+        .hero-bg::after {
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 0.96) 62%);
+        }
+
+        .nav-pill {
+            height: 48px;
+            width: 48px;
+        }
+
+        .menu-overlay .big-link,
+        .menu-overlay .contact-small .w-full {
+            text-align: center;
+        }
+
+        .menu-overlay .contact-small .flex {
+            justify-content: center !important;
+        }
+    }
+</style>
+
+<body class="antialiased text-white bg-gray-900">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <section id="hero" class="hero-bg min-h-screen h-screen flex flex-col">
+
+        <!-- Canvas z-index 3 — above vignette (2), below page content (50) -->
+        <canvas id="fw-canvas"></canvas>
+
+        <header class="w-full flex items-center justify-between px-4 sm:px-6 py-4 above-overlay">
+            <img src="/img/hh-removebg-preview.png" alt="logo" class="h-20 w-21 rounded-full object-cover" />
+
+            <div class="hide-below-lg lg:hidden w-12 h-12"></div>
+
+            <button id="menuBtn" aria-label="open menu"
+                class="nav-pill card-lift p-1 flex items-center justify-center focus:outline-none">
+                <div id="burgerWrap" class="burger-two">
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </header>
+
+        <div class="flex-1 flex items-center justify-center px-4 sm:px-6">
+            <div id="heroContent"
+                class="max-w-6xl w-full grid grid-cols-12 gap-6 items-center continuous-underline-animation">
+
+                <div
+                    class="col-span-12 lg:col-span-4 text-center lg:text-right above-overlay side-text-container animate-slide-up order-1 lg:order-none">
+                    <p class="text-sm md:text-xl lg:text-[18px] tracking-tight">
+                        It's never about selling the
+                        <span>
+                            <span class="highlight-wrap">
+                                <span class="last-word">product</span>
+                            </span>
+                        </span>
+                    </p>
+                </div>
+
+                <div
+                    class="col-span-12 lg:col-span-4 flex justify-center items-center above-overlay z-50 animate-slide-up order-2 lg:order-none">
+                    <img src="/img/quake brand logo.png" alt="center"
+                        class="object-cover w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-96 lg:h-96 rounded-full animate-subtle-bounce" />
+                </div>
+
+                <div
+                    class="col-span-12 lg:col-span-4 text-center lg:text-left above-overlay mt-6 lg:mt-0 side-text-container animate-slide-up order-3 lg:order-none">
+                    <p class="text-sm md:text-xl lg:text-[18px] tracking-tight">
+                        It's about selling the
+                        <span>
+                            <span class="highlight-wrap">
+                                <span class="last-word">problem you solve</span>
+                            </span>
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <div id="menuOverlay" class="menu-overlay hidden" aria-hidden="true">
+        <button id="closeOverlay" class="close-x card-lift" aria-label="close menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="h-full w-full flex flex-col lg:flex-row">
+
+            <div class="w-full lg:w-2/3 h-full py-8 px-8 lg:py-16 lg:px-24 menu-links-container">
+                <div class="menu-links-container-wrap">
+                    <a href="/home.html" class="big-link text-gray-500 relative text-center lg:text-left">
+                        <span class="num">01</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front">HOME</span>
+                            <span class="flip-face flip-back">HOME</span>
+                        </span>
+                    </a>
+
+                    <a href="/about.html" class="big-link text-gray-500 relative text-center lg:text-left mt-8">
+                        <span class="num">02</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front">WHO WE ARE</span>
+                            <span class="flip-face flip-back">WHO WE ARE</span>
+                        </span>
+                    </a>
+
+                    <a href="/work.html" class="big-link text-gray-500 relative text-center lg:text-left mt-8">
+                        <span class="num">03</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front">OUR WORK</span>
+                            <span class="flip-face flip-back">OUR WORK</span>
+                        </span>
+                    </a>
+
+                    <a href="/contact.html" class="big-link text-gray-500 relative text-center lg:text-left mt-8">
+                        <span class="num">04</span>
+                        <span class="flip-wrap">
+                            <span class="flip-face front">CONTACT</span>
+                            <span class="flip-face flip-back">CONTACT</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="w-full lg:w-1/3 py-8 px-8 lg:py-12 lg:px-20 flex flex-col justify-center items-center contact-small flex-1">
+                <div class="w-full text-center lg:text-left">
+                    <p class="text-[12px] mt-8 text-gray-500 uppercase tracking-wider opacity-80">Work inquiries</p>
+
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        KG 11 Ave 2nd Floor, Nobiscum House
+                    </p>
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        info@quakeadvertising.com
+                    </p>
+
+                    <p
+                        class="mt-1 text-[12px] text-gray-500 font-medium flex items-center justify-center lg:justify-start gap-2">
+                        Ph:+250 788 382 228
+                    </p>
+
+                    <!-- Social Icons -->
+                    <div class="flex items-center justify-center lg:justify-start gap-4 mt-3">
+                        <a href="https://www.facebook.com/quakebrandfix/"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://x.com/quakebrandfix"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/quakebrandfix/?hl=en"
+                            class="text-gray-500 hover:text-orange-500 text-xs transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Link external JS -->
+    <script src="main.js"></script>
+
+    <!-- ═══════════════════════════════════════════════
+         FIREWORKS — one-time, runs once then self-destructs
+         Timeline from trigger (T=0):
+           0  – 4000ms  → rockets fire continuously (large, fast)
+           4000 – 5000  → particles form "Celebrating 10 Years"
+                          text positioned ABOVE the center logo
+           5000 – 7000  → text holds for 2 seconds
+           7000 – 7800  → fade out
+           7800ms       → canvas removed, done forever
+    ════════════════════════════════════════════════ -->
+    <script>
+        window.addEventListener('load', function () {
+
+            // 2 second delay after page load
+            setTimeout(startFireworks, 800);
+
+            function startFireworks() {
+                const canvas = document.getElementById('fw-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const W = canvas.width = canvas.offsetWidth;
+                const H = canvas.height = canvas.offsetHeight;
+
+                // Orange-500 palette
+                const COLORS = [
+                    'rgba(249,115,22,',   // #F97316
+                    'rgba(251,146,60,',   // lighter
+                    'rgba(234,88,12,',    // deeper
+                    'rgba(255,160,50,',   // warm highlight
+                ];
+
+                // ── Text target Y: upper third of screen, well above center logo ──
+                // Center logo sits around H*0.5; we place text at H*0.28
+                const TEXT_Y = H * 0.28;
+
+                // ── Pre-sample "Celebrating 10 Years" pixel positions at TEXT_Y ──
+                const off = document.createElement('canvas');
+                off.width = W; off.height = H;
+                const octx = off.getContext('2d');
+                const fs = Math.max(32, Math.min(W / 8, 72)); // larger font
+                octx.font = `800 ${fs}px Playfair Display, serif`;
+                octx.fillStyle = '#fff';
+                octx.textAlign = 'center';
+                octx.textBaseline = 'middle';
+                const padding = W < 768 ? W * 0.70 : W;
+                octx.fillText('Celebrating 10 Years', W / 2, TEXT_Y, padding);
+                const imgData = octx.getImageData(0, 0, W, H).data;
+                const pixels = [];
+                const step = 4;
+                for (let y = 0; y < H; y += step)
+                    for (let x = 0; x < W; x += step)
+                        if (imgData[(y * W + x) * 4 + 3] > 128)
+                            pixels.push({ x, y });
+
+                // ── Timeline constants (ms from T=0) ──
+                const T_FORM_START = 4000;   // stop rockets, start forming text
+                const T_HOLD_START = 5000;   // text fully formed, hold
+                const T_FADE_START = 7000;   // start fading
+                const T_END = 7800;   // done, remove canvas
+
+                // ── State ──
+                const rockets = [];
+                const bursts = [];
+                let formParticles = [];
+                let formBuilt = false;
+                let raf;
+                const startTs = performance.now();
+
+                // ── Rocket factory — bigger, faster ──
+                function makeRocket() {
+                    const ci = Math.floor(Math.random() * COLORS.length);
+                    return {
+                        x: W * 0.1 + Math.random() * W * 0.8,
+                        y: H + 5,
+                        vx: (Math.random() - 0.5) * 3,
+                        vy: -(13 + Math.random() * 8),  // faster, travels higher
+                        targetY: H * 0.05 + Math.random() * H * 0.55,
+                        trail: [],
+                        done: false,
+                        color: COLORS[ci],
+                        size: 3 + Math.random() * 2,      // bigger head
+                    };
+                }
+
+                // Launch first wave immediately
+                for (let i = 0; i < 6; i++) rockets.push(makeRocket());
+
+                // Keep launching rockets every 400ms during rocket phase
+                let lastLaunch = 0;
+
+                // ── Build form particles ──
+                function buildFormParticles() {
+                    formParticles = [];
+                    const max = Math.min(pixels.length, 500);
+                    const skip = Math.max(1, Math.floor(pixels.length / max));
+                    for (let i = 0; i < pixels.length; i += skip) {
+                        const p = pixels[i];
+                        formParticles.push({
+                            // Start scattered around explosion zones (upper area)
+                            x: p.x + (Math.random() - 0.5) * W * 0.9,
+                            y: p.y + (Math.random() - 0.5) * H * 0.6,
+                            tx: p.x,
+                            ty: p.y,
+                            size: 2 + Math.random() * 2,
+                            a: 0,
+                            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                        });
+                    }
+                }
+
+                // ── Main render loop ──
+                function loop(ts) {
+                    const elapsed = ts - startTs;
+                    ctx.clearRect(0, 0, W, H);
+
+                    // ── Rocket phase (0 → T_FORM_START) ──
+                    if (elapsed < T_FORM_START) {
+                        // Launch new rockets every 400ms
+                        if (elapsed - lastLaunch > 400) {
+                            rockets.push(makeRocket());
+                            rockets.push(makeRocket()); // launch 2 at a time
+                            lastLaunch = elapsed;
+                        }
+
+                        rockets.forEach(r => {
+                            if (r.done) return;
+                            r.trail.push({ x: r.x, y: r.y });
+                            if (r.trail.length > 18) r.trail.shift();
+                            r.x += r.vx;
+                            r.y += r.vy;
+                            r.vy *= 0.975;
+
+                            // Trail
+                            r.trail.forEach((t, i) => {
+                                const a = (i / r.trail.length) * 0.6;
+                                ctx.beginPath();
+                                ctx.arc(t.x, t.y, r.size * 0.6, 0, Math.PI * 2);
+                                ctx.fillStyle = r.color + a + ')';
+                                ctx.fill();
+                            });
+                            // Head — larger
+                            ctx.beginPath();
+                            ctx.arc(r.x, r.y, r.size, 0, Math.PI * 2);
+                            ctx.fillStyle = r.color + '1)';
+                            ctx.fill();
+
+                            if (r.y <= r.targetY) {
+                                r.done = true;
+                                // Large burst — more particles, bigger spread
+                                const count = 80 + Math.floor(Math.random() * 50);
+                                for (let i = 0; i < count; i++) {
+                                    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.2;
+                                    const spd = 3 + Math.random() * 6; // faster spread
+                                    bursts.push({
+                                        x: r.x, y: r.y,
+                                        vx: Math.cos(angle) * spd,
+                                        vy: Math.sin(angle) * spd,
+                                        life: 1,
+                                        decay: 0.018 + Math.random() * 0.012,
+                                        size: 2 + Math.random() * 3,    // bigger sparks
+                                        color: r.color,
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    // ── Draw burst sparks (shown during both rocket & form phases) ──
+                    for (let i = bursts.length - 1; i >= 0; i--) {
+                        const b = bursts[i];
+                        b.x += b.vx;
+                        b.y += b.vy;
+                        b.vy += 0.09;  // gentle gravity
+                        b.vx *= 0.98;
+                        b.life -= b.decay;
+                        if (b.life <= 0) { bursts.splice(i, 1); continue; }
+                        ctx.beginPath();
+                        ctx.arc(b.x, b.y, b.size * b.life, 0, Math.PI * 2);
+                        ctx.fillStyle = b.color + (b.life * 0.85) + ')';
+                        ctx.fill();
+                    }
+
+                    // ── Form phase (T_FORM_START → T_HOLD_START) ──
+                    if (elapsed >= T_FORM_START) {
+                        if (!formBuilt) { buildFormParticles(); formBuilt = true; }
+
+                        // Fade alpha for fade-out phase
+                        let globalA = 1;
+                        if (elapsed >= T_FADE_START) {
+                            globalA = Math.max(0, 1 - (elapsed - T_FADE_START) / (T_END - T_FADE_START));
+                        }
+
+                        formParticles.forEach(p => {
+                            p.x += (p.tx - p.x) * 0.10;
+                            p.y += (p.ty - p.y) * 0.10;
+                            p.a = Math.min(1, p.a + 0.04);
+
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                            ctx.fillStyle = p.color + (p.a * globalA * 0.95) + ')';
+                            ctx.fill();
+                        });
+                    }
+
+                    // ── End ──
+                    if (elapsed >= T_END) {
+                        cancelAnimationFrame(raf);
+                        canvas.remove();
+                        return;
+                    }
+
+                    raf = requestAnimationFrame(loop);
+                }
+
+                raf = requestAnimationFrame(loop);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
