@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Main pages -->
   <url>
     <loc>https://quakebrandfix.com/</loc>
     <priority>1.0</priority>
@@ -25,5 +26,18 @@
     <loc>https://quakebrandfix.com/contact.html</loc>
     <priority>0.8</priority>
   </url>
+
+  <!-- Work / Project pages -->
+  <url><loc>https://quakebrandfix.com/skol.html</loc></url>
+  <url><loc>https://quakebrandfix.com/nil.html</loc></url>
+  <url><loc>https://quakebrandfix.com/real.html</loc></url>
+  <url><loc>https://quakebrandfix.com/mukamira.html</loc></url>
+  <url><loc>https://quakebrandfix.com/mtn.html</loc></url>
+  <url><loc>https://quakebrandfix.com/momo.html</loc></url>
+  <url><loc>https://quakebrandfix.com/isco.html</loc></url>
+  <url><loc>https://quakebrandfix.com/inyange.html</loc></url>
+  <url><loc>https://quakebrandfix.com/giheke.html</loc></url>
+  <url><loc>https://quakebrandfix.com/ess.html</loc></url>
+  <url><loc>https://quakebrandfix.com/ambitech.html</loc></url>
 
 </urlset>
